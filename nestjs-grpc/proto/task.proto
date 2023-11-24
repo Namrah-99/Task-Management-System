@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package task;
+
+service TaskService{
+    rpc CreateTask(CreateTaskDto) returns (Task){}
+    rpc FindAllTask (Empty) returns (Tasks) {}
+    rpc FindOneTask (FindOneTaskDto) returns (Task) {}
+    rpc UpdateTask (UpdateTaskDto) returns (Task) {}
+    rpc RemoveTask (FindOneTaskDto) returns (Task) {}
+    rpc QueryTasks (stream paginationDto) returns (stream Tasks) {}
+}
+
+message paginationDto {
+    int32 page = 1;
+    int32 skip = 2;
+}
+
+message UpdateTaskDto {
+    string id = 1;
+    Category category = 2;
+}
+
+message FindOneTaskDto {
+string id =1;
+};
+
+message Empty {};
+
+message Tasks {
+    repeated Task tasks = 1;
+}
+
+message CreateTaskDto {
+    string description = 1;
+    int32 estimatedTime = 2;
+}
+
+message Task {
+    string id =1;
+    string description = 2;
+    int32 estimatedTime = 3;
+    bool completed = 4;
+    Category category = 5;
+}
+
+message Category {
+    optional string name = 1;
+    optional string subCategory = 2;
+}
