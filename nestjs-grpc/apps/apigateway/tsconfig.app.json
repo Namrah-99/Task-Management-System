@@ -4,6 +4,6 @@
     "declaration": false,
     "outDir": "../../dist/apps/apigateway"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*","proto/**/*.proto"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

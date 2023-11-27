@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto, FindOneUserDto, PaginationDto, UserServiceClient, USER_SERVICE_NAME } from '@app/common'
-import { AUTH_SERVICE, } from './constants';
+import { CreateUserDto, UpdateUserDto, UserPaginationDto, UserServiceClient, USER_SERVICE_NAME } from '@app/common/types/user'
+import { USER_SERVICE } from '../constants';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ReplaySubject } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 export class UsersService implements OnModuleInit {
   private usersService: UserServiceClient;
 
-  constructor(@Inject(AUTH_SERVICE) private client: ClientGrpc) { }
+  constructor(@Inject(USER_SERVICE) private client: ClientGrpc) { }
 
   onModuleInit() {
     this.usersService =
@@ -37,7 +37,7 @@ export class UsersService implements OnModuleInit {
   }
 
   emailUsers() {
-    const users$ = new ReplaySubject<PaginationDto>();
+    const users$ = new ReplaySubject<UserPaginationDto>();
 
     users$.next({ page: 0, skip: 25 });
     users$.next({ page: 1, skip: 25 });

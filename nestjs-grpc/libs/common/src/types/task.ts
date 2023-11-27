@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 
 export const protobufPackage2 = "task";
 
-export interface paginationDto {
+export interface TaskPaginationDto {
   page: number;
   skip: number;
 }
@@ -56,7 +56,7 @@ export interface TaskServiceClient {
 
   removeTask(request: FindOneTaskDto): Observable<Task>;
 
-  queryTasks(request: Observable<paginationDto>): Observable<Tasks>;
+  queryTasks(request: Observable<TaskPaginationDto>): Observable<Tasks>;
 }
 
 export interface TaskServiceController {
@@ -70,7 +70,7 @@ export interface TaskServiceController {
 
   removeTask(request: FindOneTaskDto): Promise<Task> | Observable<Task> | Task;
 
-  queryTasks(request: Observable<paginationDto>): Observable<Tasks>;
+  queryTasks(request: Observable<TaskPaginationDto>): Observable<Tasks>;
 }
 
 export function TaskServiceControllerMethods() {

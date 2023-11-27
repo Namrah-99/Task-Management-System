@@ -4,14 +4,14 @@ package task;
 
 service TaskService{
     rpc CreateTask(CreateTaskDto) returns (Task){}
-    rpc FindAllTask (Empty) returns (Tasks) {}
+    rpc FindAllTask (EmptyTask) returns (Tasks) {}
     rpc FindOneTask (FindOneTaskDto) returns (Task) {}
     rpc UpdateTask (UpdateTaskDto) returns (Task) {}
     rpc RemoveTask (FindOneTaskDto) returns (Task) {}
-    rpc QueryTasks (stream paginationDto) returns (stream Tasks) {}
+    rpc QueryTasks (stream TaskPaginationDto) returns (stream Tasks) {}
 }
 
-message paginationDto {
+message TaskPaginationDto {
     int32 page = 1;
     int32 skip = 2;
 }
@@ -25,7 +25,7 @@ message FindOneTaskDto {
 string id =1;
 };
 
-message Empty {};
+message EmptyTask {};
 
 message Tasks {
     repeated Task tasks = 1;

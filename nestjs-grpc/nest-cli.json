@@ -36,19 +36,23 @@
     "user": {
       "type": "application",
       "root": "apps/user",
-      "entryFile": "main",
-      "sourceRoot": "apps/user/src",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/user/tsconfig.app.json"
+        "tsConfigPath": "apps/user/tsconfig.app.json",
+        "assets": ["proto/*.proto"],
+        "watchAssets": true
       }
     },
     "task": {
       "type": "application",
       "root": "apps/task",
-      "entryFile": "main",
-      "sourceRoot": "apps/task/src",
+      "entryFile": "src/main",
+      "sourceRoot": "./",
       "compilerOptions": {
-        "tsConfigPath": "apps/task/tsconfig.app.json"
+        "tsConfigPath": "apps/task/tsconfig.app.json",
+        "assets": ["proto/*.proto"],
+        "watchAssets": true
       }
     },
     "common": {
