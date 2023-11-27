@@ -37,5 +37,5 @@ Implement error handling and data validation on both sides.
 
 ## API Documentation
 
-[API Documentation](https://documenter.getpostman.com/view/29212903/2s9YeEbrwL)
+[POSTMAN Published API Documentation](https://documenter.getpostman.com/view/29212903/2s9YeEbrwL)
 
