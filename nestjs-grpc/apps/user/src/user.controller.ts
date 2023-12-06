@@ -1,34 +1,34 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Body } from '@nestjs/common';
 import { UserService } from './user.service';
-import {UserServiceController, CreateUserDto, UpdateUserDto, UserServiceControllerMethods, FindOneUserDto, UserPaginationDto} from '@app/common/types/user'
-import { Observable } from 'rxjs';
+import { UserModel } from '@app/common/schemas/user.schema';
+import { CreateUserDto, FindOneUserDto, UpdateUserDto, EmptyUser, Users  } from '@app/common/types/user';
+import { GrpcMethod } from '@nestjs/microservices';
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
-@Controller()
-@UserServiceControllerMethods()
-export class UsersController implements UserServiceController {
-  constructor(private readonly usersService: UserService) {}
-
-  createUser(createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @GrpcMethod('UserService', 'createUser')
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserModel> {
+    return await this.userService.createUser(createUserDto);
   }
 
-  findAllUser() {
-    return this.usersService.findAll();
+  @GrpcMethod('UserService', 'findAllUser')
+  async findAllUser(@Body() emptyRequest: EmptyUser): Promise<Users> {
+    return await this.userService.findAllUser();
+  }
+  
+  @GrpcMethod('UserService', 'findOneUser')
+  async findOneUser(@Body() findOneUserDto: FindOneUserDto): Promise<UserModel | null> {
+    return await this.userService.findOneUser(findOneUserDto);
   }
 
-  findOneUser(findOneUserDto: FindOneUserDto) {
-    return this.usersService.findOne(findOneUserDto.id);
+  @GrpcMethod('UserService', 'updateUser')
+  async updateUser(@Body() updateUserDto: UpdateUserDto): Promise<UserModel | null> {
+    return await this.userService.updateUser(updateUserDto);
   }
 
-  updateUser(updateUserDto: UpdateUserDto) {
-    // console.log("UPDATED USER DATA (Auth): ",updateUserDto);
-    return this.usersService.update(updateUserDto.id, updateUserDto);
-  }
-
-  removeUser(findOneUserDto: FindOneUserDto) {
-    return this.usersService.remove(findOneUserDto.id);
-  }
-  queryUsers(paginationDtoStream: Observable<UserPaginationDto>) {
-    return this.usersService.queryUsers(paginationDtoStream)
+  @GrpcMethod('UserService', 'removeUser')
+  async removeUser(@Body() findOneUserDto: FindOneUserDto): Promise<UserModel | null> {
+    return await this.userService.removeUser(findOneUserDto);
   }
 }

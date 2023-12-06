@@ -23,11 +23,12 @@ export interface User {
   username: string;
   password: string;
   age: number;
-  subscribed: boolean;
-  socialMedia: SocialMedia | undefined;
+  subscribed?: boolean;
+  socialMedia?: SocialMedia | undefined;
   email: string;
   phoneNumber: string;
   role: string;
+  accessToken?: string | undefined;
 }
 
 export interface SocialMedia {

@@ -5,9 +5,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { USER_SERVICE } from '../constants';
 import { USER_PACKAGE_NAME } from '@app/common';
 import { join } from 'path';
+import { UserGrpcClient } from './user-grpc-client';
 
 @Module({
-  imports:[
+  imports: [
     ClientsModule.register([{
       name: USER_SERVICE,
       transport: Transport.GRPC,
@@ -19,6 +20,6 @@ import { join } from 'path';
     }])
   ],
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService, UserGrpcClient]
 })
-export class UsersModule {}
+export class UsersModule { }

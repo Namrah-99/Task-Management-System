@@ -43,7 +43,7 @@ export interface User2 {
   password: string;
   age: number;
   subscribed: boolean;
-  socialMedia: SocialMedia2 | undefined;
+  socialMedia?: SocialMedia2 | undefined;
   email: string;
   phoneNumber: string;
   role: string;
@@ -66,8 +66,6 @@ export interface UserServiceClient {
   updateUser(request: UpdateUserDto): Observable<User2>;
 
   removeUser(request: FindOneUserDto): Observable<User2>;
-
-  queryUsers(request: Observable<UserPaginationDto>): Observable<Users>;
 }
 
 export interface UserServiceController {
@@ -80,8 +78,6 @@ export interface UserServiceController {
   updateUser(request: UpdateUserDto): Promise<User2> | Observable<User2> | User2;
 
   removeUser(request: FindOneUserDto): Promise<User2> | Observable<User2> | User2;
-
-  queryUsers(request: Observable<UserPaginationDto>): Observable<Users>;
 }
 
 export function UserServiceControllerMethods() {
@@ -91,7 +87,7 @@ export function UserServiceControllerMethods() {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);
     }
-    const grpcStreamMethods: string[] = ["queryUsers"];
+    const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcStreamMethod("UserService", method)(constructor.prototype[method], method, descriptor);

@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  # NestJS Backend
+  backend:
+    build:
+      context: ./nestjs-grpc
+      dockerfile: Dockerfile
+    volumes:
+      - ./nestjs-grpc:/usr/src/app
+    ports:
+      - "3000:3000"  # Replace with appropriate ports
+    environment:
+      MONGO_URI: mongodb+srv://namrahsaeed2:benten@cluster0.lxygcxb.mongodb.net/tmsdb
+    depends_on:
+      - mongo
+
+  # MongoDB
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # MongoDB default port
+
+  # Frontend (Angular)
+  frontend:
+    build:
+      context: ./angular
+      dockerfile: Dockerfile
+    volumes:
+      - ./angular:/usr/src/app
+    ports:
+      - "4000:4200"  # Replace with appropriate ports
+    environment:
+      BACKEND_URL: http://localhost:3000  # Backend URL
+    depends_on:
+      - backend

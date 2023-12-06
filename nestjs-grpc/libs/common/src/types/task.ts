@@ -18,7 +18,7 @@ export interface FindOneTaskDto {
   id: string;
 }
 
-export interface Empty2 {
+export interface EmptyTask {
 }
 
 export interface Tasks {
@@ -48,29 +48,25 @@ export const TASK_PACKAGE_NAME = "task";
 export interface TaskServiceClient {
   createTask(request: CreateTaskDto): Observable<Task>;
 
-  findAllTask(request: Empty2): Observable<Tasks>;
+  findAllTask(request: EmptyTask): Observable<Tasks>;
 
   findOneTask(request: FindOneTaskDto): Observable<Task>;
 
   updateTask(request: UpdateTaskDto): Observable<Task>;
 
   removeTask(request: FindOneTaskDto): Observable<Task>;
-
-  queryTasks(request: Observable<TaskPaginationDto>): Observable<Tasks>;
 }
 
 export interface TaskServiceController {
   createTask(request: CreateTaskDto): Promise<Task> | Observable<Task> | Task;
 
-  findAllTask(request: Empty2): Promise<Tasks> | Observable<Tasks> | Tasks;
+  findAllTask(request: EmptyTask): Promise<Tasks> | Observable<Tasks> | Tasks;
 
   findOneTask(request: FindOneTaskDto): Promise<Task> | Observable<Task> | Task;
 
   updateTask(request: UpdateTaskDto): Promise<Task> | Observable<Task> | Task;
 
   removeTask(request: FindOneTaskDto): Promise<Task> | Observable<Task> | Task;
-
-  queryTasks(request: Observable<TaskPaginationDto>): Observable<Tasks>;
 }
 
 export function TaskServiceControllerMethods() {
@@ -80,7 +76,7 @@ export function TaskServiceControllerMethods() {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("TaskService", method)(constructor.prototype[method], method, descriptor);
     }
-    const grpcStreamMethods: string[] = ["queryTasks"];
+    const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcStreamMethod("TaskService", method)(constructor.prototype[method], method, descriptor);

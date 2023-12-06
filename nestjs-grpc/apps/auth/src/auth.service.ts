@@ -1,44 +1,43 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
-import { User, RegisterUserDto, LoginUserDto } from '@app/common/types/auth'
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { RegisterUserDto, LoginUserDto, User } from '@app/common/types/auth';
 import { randomUUID } from 'crypto';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
-export class AuthService implements OnModuleInit {
+export class AuthService {
   private readonly users: User[] = [];
-  private readonly usersCount: number = 0;
 
-  onModuleInit() {
-    // for (let i = 0; i <= 100; i++) {
-    //   this.create({ username: randomUUID(), password: randomUUID(), age: 0, email: "abcdef@abcd.com", phoneNumber: "+923456789234", role: "Student" });
-    // }
-    console.log("Register a user")
+  register(registerUserDto: RegisterUserDto): User {
+    const hashedPassword = bcrypt.hashSync(registerUserDto.password, 10);
+    const newUser: User = {
+      ...registerUserDto,
+      password: hashedPassword,
+      id: randomUUID(),
+      subscribed: false,
+      socialMedia: undefined
+    };
+    this.users.push(newUser);
+    return newUser;
   }
 
-  register(registerUserDto: RegisterUserDto) {
-    return {
-      username: "namrah23",
-      password: "pass1234",
-      age: 23,
-      email: "namrah@namrah.com",
-      phoneNumber: "+923456789876",
-      role: "Student",
-      subscribed: false,
-      socialMedia: {},
-      id: randomUUID(),
-    };
+  login(loginUserDto: LoginUserDto): User {
+    const user = this.findUserByUsername(loginUserDto.username);
+    if (!user || !bcrypt.compareSync(loginUserDto.password, user.password)) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    const accessToken = this.generateToken(user);
+    // console.log("user  : ",{...user,accessToken});
+    return {...user,accessToken};
   }
 
-  login(loginUserDto: LoginUserDto) {
-    return {
-      username: "namrah99",
-      password: "pass4567",
-      age: 50,
-      email: "namrah99@namrah.com",
-      phoneNumber: "+923226789876",
-      role: "Student",
-      subscribed: false,
-      socialMedia: {},
-      id: randomUUID(),
-    };
+  private findUserByUsername(username: string): User | undefined {
+    return this.users.find((user) => user.username === username);
+  }
+
+  private generateToken(user: User): string {
+    const payload = { username: user.username, sub: user.id };
+    return jwt.sign(payload, 'helloworldabcdefghPotatoSticksPizzaPasta', { expiresIn: '1h' });
   }
 }
+

@@ -1,56 +1,34 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto, UserPaginationDto, UserServiceClient, USER_SERVICE_NAME } from '@app/common/types/user'
-import { USER_SERVICE } from '../constants';
-import { ClientGrpc } from '@nestjs/microservices';
-import { ReplaySubject } from 'rxjs';
-
+import { Injectable } from '@nestjs/common';
+import { UserGrpcClient } from './user-grpc-client';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  FindOneUserDto,
+  User2,
+  Users,
+} from '@app/common/types/user';
 
 @Injectable()
-export class UsersService implements OnModuleInit {
-  private usersService: UserServiceClient;
+export class UsersService {
+  constructor(private readonly userGrpcClient: UserGrpcClient) {}
 
-  constructor(@Inject(USER_SERVICE) private client: ClientGrpc) { }
-
-  onModuleInit() {
-    this.usersService =
-      this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
+  async findAllUser(): Promise<Users> {
+    return this.userGrpcClient.getUserServiceClient().findAllUser({}).toPromise();
   }
 
-  create(createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  async findOneUser(findOneUserDto: FindOneUserDto): Promise<User2 | null> {
+    return this.userGrpcClient.getUserServiceClient().findOneUser(findOneUserDto).toPromise();
   }
 
-  findAll() {
-    return this.usersService.findAllUser({});
+  async createUser(userData: CreateUserDto): Promise<User2> {
+    return this.userGrpcClient.getUserServiceClient().createUser(userData).toPromise();
   }
 
-  findOne(id: string) {
-    return this.usersService.findOneUser({ id });
+  async updateUser(updatedData: UpdateUserDto): Promise<User2 | null> {
+    return this.userGrpcClient.getUserServiceClient().updateUser(updatedData).toPromise();
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser({ id, ...updateUserDto });
-  }
-
-  remove(id: string) {
-    return this.usersService.removeUser({ id });
-  }
-
-  emailUsers() {
-    const users$ = new ReplaySubject<UserPaginationDto>();
-
-    users$.next({ page: 0, skip: 25 });
-    users$.next({ page: 1, skip: 25 });
-    users$.next({ page: 2, skip: 25 });
-    users$.next({ page: 3, skip: 25 });
-
-    users$.complete();
-
-    let chunkNumber = 1;
-
-    this.usersService.queryUsers(users$).subscribe((users) => {
-      console.log('Chunk', chunkNumber, users);
-      chunkNumber += 1;
-    });
+  async removeUser(findOneUserDto: FindOneUserDto): Promise<User2 | null> {
+    return this.userGrpcClient.getUserServiceClient().removeUser(findOneUserDto).toPromise();
   }
 }

@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/apigateway"
+    "outDir": "../../dist/apps/apigateway",
+    "module": "commonjs",
+    "target": "es2015",
   },
   "include": ["src/**/*","proto/**/*.proto"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDto, UpdateTaskDto} from '@app/common/types/task';
-
+import { CreateTaskDto, FindOneTaskDto, UpdateTaskDto } from '@app/common/types/task';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+
   @Post()
   create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+    return this.tasksService.createTask(createTaskDto);
   }
 
   @Get()
   findAll() {
-    return this.tasksService.findAll();
+    return this.tasksService.findAllTask();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(id);
+    const findOneTaskDto: FindOneTaskDto={id}
+    return this.tasksService.findOneTask(findOneTaskDto);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(id, updateTaskDto);
+        if (!updateTaskDto.id) {
+          updateTaskDto.id = id;
+        }
+    return this.tasksService.updateTask(updateTaskDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.tasksService.remove(id);
+    const findOneTaskDto: FindOneTaskDto={id}
+    return this.tasksService.removeTask(findOneTaskDto);
   }
 }

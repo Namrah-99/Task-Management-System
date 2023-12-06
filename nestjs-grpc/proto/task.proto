@@ -3,12 +3,11 @@ syntax = "proto3";
 package task;
 
 service TaskService{
-    rpc CreateTask(CreateTaskDto) returns (Task){}
-    rpc FindAllTask (EmptyTask) returns (Tasks) {}
-    rpc FindOneTask (FindOneTaskDto) returns (Task) {}
-    rpc UpdateTask (UpdateTaskDto) returns (Task) {}
-    rpc RemoveTask (FindOneTaskDto) returns (Task) {}
-    rpc QueryTasks (stream TaskPaginationDto) returns (stream Tasks) {}
+    rpc createTask(CreateTaskDto) returns (Task){}
+    rpc findAllTask (EmptyTask) returns (Tasks) {}
+    rpc findOneTask (FindOneTaskDto) returns (Task) {}
+    rpc updateTask (UpdateTaskDto) returns (Task) {}
+    rpc removeTask (FindOneTaskDto) returns (Task) {}
 }
 
 message TaskPaginationDto {

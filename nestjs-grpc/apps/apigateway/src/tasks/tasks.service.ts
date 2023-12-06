@@ -1,38 +1,29 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import {TASK_SERVICE_NAME, TaskServiceClient, TaskServiceController, CreateTaskDto, UpdateTaskDto, TaskServiceControllerMethods, FindOneTaskDto, TaskPaginationDto} from '@app/common/types/task';
-import { TASK_SERVICE } from '../constants';
-import { ClientGrpc } from '@nestjs/microservices';
-import { ReplaySubject } from 'rxjs';
-import { UpdateUserDto } from '@app/common';
-
+import { CreateTaskDto, UpdateTaskDto,FindOneTaskDto, Tasks, Task } from '@app/common/types/task';
+import { Injectable } from '@nestjs/common';
+import { TaskGrpcClient } from './task-grpc-client';
 @Injectable()
-export class TasksService implements OnModuleInit {
-  private tasksService: TaskServiceClient;
+export class TasksService {
+  constructor(private readonly taskGrpcClient: TaskGrpcClient) {}
 
-  constructor(@Inject(TASK_SERVICE) private client: ClientGrpc) { }
-
-  onModuleInit() {
-    this.tasksService =
-      this.client.getService<TaskServiceClient>(TASK_SERVICE_NAME);
+  async findAllTask(): Promise<Tasks> {
+    return this.taskGrpcClient.getUserServiceClient().findAllTask({}).toPromise();
   }
 
-  create(createTaskDto: CreateTaskDto) {
-    return this.tasksService.createTask(createTaskDto);
+  async findOneTask(findOneTaskDto: FindOneTaskDto): Promise<Task | null> {
+    return this.taskGrpcClient.getUserServiceClient().findOneTask(findOneTaskDto).toPromise();
   }
 
-  findAll() {
-    return this.tasksService.findAllTask({});
+  async createTask(taskData: CreateTaskDto): Promise<Task> {
+    return this.taskGrpcClient.getUserServiceClient().createTask(taskData).toPromise();
   }
 
-  findOne(id: string) {
-    return this.tasksService.findOneTask({ id });
+  async updateTask(updatedData: UpdateTaskDto): Promise<Task | null> {
+    return this.taskGrpcClient.getUserServiceClient().updateTask(updatedData).toPromise();
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.updateTask({ id, ...updateTaskDto });
+  async removeTask(findOneTaskDto: FindOneTaskDto): Promise<Task | null> {
+    return this.taskGrpcClient.getUserServiceClient().removeTask(findOneTaskDto).toPromise();
   }
 
-  remove(id: string) {
-    return this.tasksService.removeTask({ id });
-  }
 }
+

@@ -1,77 +1,59 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
-import { User2, CreateUserDto, UpdateUserDto, UserPaginationDto, Users } from '@app/common/types/user'
-import { randomUUID } from 'crypto';
-import { Observable, Subject } from 'rxjs';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { UserModel } from '@app/common/schemas/user.schema';
+import { CreateUserDto, FindOneUserDto, UpdateUserDto, User2, Users  } from '@app/common/types/user';
 
 @Injectable()
-export class UserService implements OnModuleInit {
-  private readonly users: User2[] = [];
-  private readonly usersCount: number = 0;
+export class UserService {
+  constructor(@InjectModel(UserModel.name) private readonly userModel: Model<UserModel>) {}
 
-  onModuleInit() {
-    for (let i = 0; i <= 100; i++) {
-      this.create({ username: randomUUID(), password: randomUUID(), age: 0, email: "abcdef@abcd.com", phoneNumber: "+923456789234", role: "Student" });
-    }
+  async findAllUser(): Promise<Users> {
+    const users: UserModel[] = await this.userModel.find().exec();
+    const transformedUsers: User2[] = users.map((user) => {
+      return {
+        id: user._id, // Replace with your actual ID property
+        username: user.username,
+        password: user.password,
+        age: user.age,
+        subscribed: user.subscribed,
+        socialMedia: user.socialMedia,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        role: user.role,
+      };
+    });
+
+    return { users: transformedUsers };
   }
 
-  create(createUserDto: CreateUserDto) {
-    const user: User2 = {
-      ...createUserDto,
-      subscribed: false,
-      socialMedia: {},
-      id: randomUUID(),
-    };
-    this.users.push(user);
+  async findOneUser(findOneUserDto: FindOneUserDto): Promise<UserModel | null> {
+    console.log("findOneUserDto.id  ",findOneUserDto.id)
+    const user = await this.userModel.findById(findOneUserDto.id).exec();
+    if (!user) {
+      return null;
+    }
     return user;
   }
 
-  findAll(): Users {
-    return { users: this.users };
+  async createUser(createUserDto: CreateUserDto): Promise<UserModel> {
+    const createdUser = new this.userModel(createUserDto);
+    console.log("createdUser  ",createdUser)
+    return await createdUser.save();
   }
 
-  findOne(id: string) {
-    return this.users.find((user) => user.id === id);
+  async updateUser(updateUserDto: UpdateUserDto): Promise<UserModel | null> {
+    return await this.userModel.findByIdAndUpdate(
+      updateUserDto.id,
+      { ...updateUserDto },
+      { new: true }
+    ).exec();
   }
 
-  update(id: string, updateUserDto: UpdateUserDto): User2 {
-    // console.log("UPDATED USER DATA (Auth): ",updateUserDto);
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex !== -1) {
-      this.users[userIndex] = {
-        ...this.users[userIndex],
-        ...updateUserDto,
-      };
-      return this.users[userIndex];
-    }
-    throw new NotFoundException(`User not found by id ${id}.`);
+  async removeUser(findOneUserDto: FindOneUserDto): Promise<UserModel | null> {
+    const deletedUser = await this.userModel.findByIdAndDelete(findOneUserDto.id).exec();
+    return deletedUser ? new this.userModel(deletedUser).toObject() as UserModel : null;
   }
 
-  remove(id: string) {
-    const userIndex = this.users.findIndex((user) => user.id === id);
-    if (userIndex !== -1) {
-      return this.users.splice(userIndex)[0];
-    }
-    throw new NotFoundException(`User not found by id ${id}.`);
-  }
-
-  queryUsers(
-    paginationDtoStream: Observable<UserPaginationDto>,
-  ): Observable<Users> {
-    const subject = new Subject<Users>();
-
-    const onNext = (paginationDto: UserPaginationDto) => {
-      const start = paginationDto.page * paginationDto.skip;
-      subject.next({
-        users: this.users.slice(start, start + paginationDto.skip),
-      });
-    };
-    const onComplete = () => subject.complete();
-    paginationDtoStream.subscribe({
-      next: onNext,
-      complete: onComplete,
-    });
-
-    return subject.asObservable();
-  }
-
+  
 }
