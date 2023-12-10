@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
-import { TASK_SERVICE } from '../constants';
 import { TASK_PACKAGE_NAME } from '@app/common/types/task';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
@@ -10,7 +9,7 @@ import { TaskGrpcClient } from './task-grpc-client';
 @Module({
   imports: [
     ClientsModule.register([{
-      name: TASK_SERVICE,
+      name: TASK_PACKAGE_NAME,
       transport: Transport.GRPC,
       options: {
         package: TASK_PACKAGE_NAME,

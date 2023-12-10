@@ -1,24 +1,18 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import {AuthServiceClient, AuthServiceController, AuthServiceControllerMethods, LoginUserDto, RegisterUserDto, AUTH_SERVICE_NAME} from '@app/common/types/auth'
-import { ClientGrpc } from '@nestjs/microservices';
-import { AUTH_SERVICE } from '../constants';
+import { Injectable } from '@nestjs/common';
+import { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse } from '@app/common/types/auth';
+import { Client, ClientGrpc } from '@nestjs/microservices';
+import { grpcClientOptions } from './grpc-client.options';
+import { AuthGrpcClient } from './auth-grpc-client';
 
 @Injectable()
-export class AuthService implements OnModuleInit {
-  private authService: AuthServiceClient;
-
-  constructor(@Inject(AUTH_SERVICE) private client: ClientGrpc) { }
-
-  onModuleInit() {
-    this.authService =
-      this.client.getService<AuthServiceClient>(AUTH_SERVICE_NAME);
-  }
-  register(registerUserDto: RegisterUserDto) {
-    return this.authService.registerUser(registerUserDto);
+export class AuthService {
+  constructor(private readonly authGrpcClient: AuthGrpcClient) {}
+  
+  async register(data: RegisterRequest): Promise<RegisterResponse> {
+    return this.authGrpcClient.getUserServiceClient().Register(data).toPromise();
   }
 
-  login(loginUserDto: LoginUserDto) {
-    return this.authService.loginUser(loginUserDto);
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    return this.authGrpcClient.getUserServiceClient().Login(data).toPromise();
   }
-
 }

@@ -1,18 +1,24 @@
 import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
-import {AuthServiceController, AuthServiceControllerMethods, LoginUserDto, RegisterUserDto, User} from '@app/common/types/auth'
+import {
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  LoginResponse,
+} from '@app/common/types/auth';
 
 @Controller()
-@AuthServiceControllerMethods()
-export class AuthController implements AuthServiceController {
+export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  registerUser(registerUserDto: RegisterUserDto) {
-    return this.authService.register(registerUserDto);
+  @GrpcMethod('AuthService', 'Register')
+  async register(data: RegisterRequest): Promise<RegisterResponse> {
+    return await this.authService.register(data);
   }
 
-  loginUser(loginUserDto: LoginUserDto) {
-    return this.authService.login(loginUserDto);
+  @GrpcMethod('AuthService', 'Login')
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    return await this.authService.login(data);
   }
-
 }

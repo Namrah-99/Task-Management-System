@@ -4,55 +4,42 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "auth";
 
-export interface RegisterUserDto {
-  username: string;
-  password: string;
-  age: number;
-  email: string;
-  phoneNumber: string;
-  role: string;
-}
-
-export interface LoginUserDto {
+export interface RegisterRequest {
   username: string;
   password: string;
 }
 
-export interface User {
-  id: string;
-  username: string;
-  password: string;
-  age: number;
-  subscribed?: boolean;
-  socialMedia?: SocialMedia | undefined;
-  email: string;
-  phoneNumber: string;
-  role: string;
-  accessToken?: string | undefined;
+export interface RegisterResponse {
+  message: string;
+  userId: string;
 }
 
-export interface SocialMedia {
-  twitterUri?: string | undefined;
-  fbUri?: string | undefined;
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  accessToken: string;
 }
 
 export const AUTH_PACKAGE_NAME = "auth";
 
 export interface AuthServiceClient {
-  registerUser(request: RegisterUserDto): Observable<User>;
+  register(request: RegisterRequest): Observable<RegisterResponse>;
 
-  loginUser(request: LoginUserDto): Observable<User>;
+  login(request: LoginRequest): Observable<LoginResponse>;
 }
 
 export interface AuthServiceController {
-  registerUser(request: RegisterUserDto): Promise<User> | Observable<User> | User;
+  register(request: RegisterRequest): Promise<RegisterResponse> | Observable<RegisterResponse> | RegisterResponse;
 
-  loginUser(request: LoginUserDto): Promise<User> | Observable<User> | User;
+  login(request: LoginRequest): Promise<LoginResponse> | Observable<LoginResponse> | LoginResponse;
 }
 
 export function AuthServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["registerUser", "loginUser"];
+    const grpcMethods: string[] = ["register", "login"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("AuthService", method)(constructor.prototype[method], method, descriptor);

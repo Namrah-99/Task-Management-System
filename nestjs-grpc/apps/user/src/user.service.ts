@@ -37,7 +37,18 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserModel> {
-    const createdUser = new this.userModel(createUserDto);
+    // const createdUser = new this.userModel(createUserDto);
+    const { username, password, age, email, phoneNumber, role } = createUserDto;
+    const createdUser = new this.userModel({
+      username,
+      password,
+      age,
+      email,
+      phoneNumber,
+      role,
+      subscribed: false,
+    });
+
     console.log("createdUser  ",createdUser)
     return await createdUser.save();
   }
