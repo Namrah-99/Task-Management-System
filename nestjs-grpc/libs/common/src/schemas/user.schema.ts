@@ -3,20 +3,21 @@ import { Document, SchemaTypes } from 'mongoose';
 
 @Schema()
 export class UserModel extends Document {
-  @Prop({ required: true })
-  username: string;
-
-  @Prop({ required: true })
-  password: string;
-
-  @Prop({ required: true })
-  age: number;
 
   @Prop({ required: true })
   email: string;
 
   @Prop({ required: true })
-  phoneNumber: string;
+  password: string;
+
+  @Prop()
+  username?: string;
+
+  @Prop()
+  age?: number;
+
+  @Prop()
+  phoneNumber?: string;
 
   @Prop({ required: true })
   role: string;

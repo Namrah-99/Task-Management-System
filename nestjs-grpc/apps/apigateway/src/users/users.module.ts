@@ -5,6 +5,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { USER_PACKAGE_NAME } from '@app/common';
 import { join } from 'path';
 import { UserGrpcClient } from './user-grpc-client';
+import { JwtAuthGuard } from '@app/common/guards/jwt.auth.guard';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { UserGrpcClient } from './user-grpc-client';
     }])
   ],
   controllers: [UsersController],
-  providers: [UsersService, UserGrpcClient]
+  providers: [UsersService, UserGrpcClient, JwtAuthGuard]
 })
 export class UsersModule { }

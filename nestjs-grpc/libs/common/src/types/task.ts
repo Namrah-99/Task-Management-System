@@ -2,7 +2,7 @@
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
-export const protobufPackage2 = "task";
+export const protobufPackage1 = "task";
 
 export interface TaskPaginationDto {
   page: number;

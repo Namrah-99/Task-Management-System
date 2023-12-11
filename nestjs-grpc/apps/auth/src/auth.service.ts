@@ -13,28 +13,25 @@ export class AuthService {
   constructor(@InjectModel(AuthModel.name) private readonly authModel: Model<AuthModel>, private readonly userService: UserService,) {}
 
   async register(data: RegisterRequest): Promise<RegisterResponse> {
-    const { username, password } = data;
+    const { email, password } = data;
 
     // Create user first
     const createdUser = await this.userService.createUser({
-      username,
+      email,
       password,
-      age: 0,
-      email: '',
-      phoneNumber: '',
-      role: '',
+      role: 'student'
     });
 
     // Use the created user's _id to save auth details
-    const newAuth = new this.authModel({ _id: createdUser._id, username, password });
+    const newAuth = new this.authModel({ _id: createdUser._id, email, password });
     const user = await newAuth.save();
 
     return { message: 'User registered successfully', userId: user._id };
   }
   
   async login(data: LoginRequest): Promise<LoginResponse> {
-    const { username, password } = data;
-    const user = await this.authModel.findOne({ username, password }).exec();
+    const { email, password } = data;
+    const user = await this.authModel.findOne({ email, password }).exec();
     if (!user) {
       throw new Error('Invalid credentials');
     }
@@ -44,7 +41,7 @@ export class AuthService {
   }
 
   generateToken(user: AuthModel): string {
-    const payload = { username: user.username, sub: user._id };
+    const payload = { username: user.email, sub: user._id };
     return jwt.sign(payload, this.JWT_SECRET, { expiresIn: '1h' });
   }
 

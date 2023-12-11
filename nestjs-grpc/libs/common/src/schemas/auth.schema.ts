@@ -7,7 +7,7 @@ export class AuthModel extends Document {
   _id: string; // Explicitly defining _id
 
   @Prop({ required: true })
-  username: string;
+  email: string;
 
   @Prop({ required: true })
   password: string;

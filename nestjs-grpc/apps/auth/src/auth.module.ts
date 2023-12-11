@@ -9,18 +9,21 @@ import { AuthModel, AuthSchema } from '@app/common/schemas/auth.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModel, UserSchema } from '@app/common/schemas/user.schema';
 import { UserService } from 'apps/user/src/user.service';
+import { JwtStrategy } from './strategy/jwt-strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [MongoModule,
       MongooseModule.forFeature([{ name: AuthModel.name, schema: AuthSchema }]),
       MongooseModule.forFeature([{ name: UserModel.name, schema: UserSchema }]),
+      PassportModule.register({ defaultStrategy: 'jwt' }), // Register the default JWT strategy
       JwtModule.register({
-        secret: 'abc123',
+        secret: 'apple-banana-carrot',
         signOptions: { expiresIn: '1h' },
       }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService],
+  providers: [AuthService, UserService, JwtStrategy],
   exports: [AuthService]
 })
 export class AuthModule {}

@@ -48,22 +48,22 @@ export interface Users {
 }
 
 export interface CreateUserDto {
-  username: string;
-  password: string;
-  age?: number | undefined;
   email: string;
-  phoneNumber: string;
-  role: string;
+  password: string;
+  username?: string | undefined;
+  age?: number | undefined;
+  phoneNumber?: string | undefined;
+  role?: string | undefined;
 }
 
 export interface User2 {
   id: string;
-  username: string;
+  email: string;
   password: string;
+  username: string;
   age: number;
   subscribed: boolean;
   socialMedia?: SocialMedia2 | undefined;
-  email: string;
   phoneNumber: string;
   role: string;
 }
