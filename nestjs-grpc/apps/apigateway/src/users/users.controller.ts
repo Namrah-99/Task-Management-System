@@ -25,6 +25,7 @@ export class UsersController {
   @Get()
   @UseGuards(JwtAuthGuard) // Apply JwtAuthGuard here to protect this route
   findAll() {
+    console.log('user controller ')
     return this.usersService.findAllUser();
   }
 

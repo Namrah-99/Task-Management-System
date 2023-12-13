@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
-import { UserService } from '../services/task.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-management',
@@ -17,13 +17,20 @@ export class UserManagementComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+    console.log('fetchUsers is called next')
     this.fetchUsers();
   }
 
   fetchUsers(): void {
     this.userService.getUsers().subscribe(
-      (data: User[]) => {
-        this.users = data;
+      (data: any) => {
+        console.log('Users data : ', data)
+        if (data && data.users) {
+          this.users = data.users; // Replace 'users' with the actual property name
+        } else {
+          console.error('Unexpected response structure:', data);
+          this.errorMessage = 'Failed to fetch users.';
+        }
       },
       (error) => {
         this.errorMessage = 'Failed to fetch users.';
@@ -83,4 +90,9 @@ export class UserManagementComponent implements OnInit {
     this.isEdit = false;
     this.editingUser = {} as User; // Reset the editing user object
   }
+
+  updateSocialMedia(key: string, value: string): void {
+    this.newUser.socialMedia = { ...(this.newUser.socialMedia || {}), [key]: value };
+  }
+  
 }

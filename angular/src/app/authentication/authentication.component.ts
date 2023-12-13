@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -18,14 +19,15 @@ export class AuthenticationComponent {
     password: ''
   };
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   register(): void {
     this.authService.register(this.registerUserData).subscribe(
       response => {
         // Handle successful registration response
         console.log('Registration successful!', response);
-        // Redirect or display success message
+        // Redirect to the users route after registration
+        this.router.navigate(['/users']);
       },
       error => {
         // Handle error
@@ -40,7 +42,9 @@ export class AuthenticationComponent {
       response => {
         // Handle successful login response
         console.log('Login successful!', response);
-        // Store user token or redirect to dashboard
+        this.authService.saveToken(response.access_token);
+        // Redirect to the users route after login
+        this.router.navigate(['/users']);
       },
       error => {
         // Handle error

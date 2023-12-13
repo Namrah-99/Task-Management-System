@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import { UserModel, UserSchema } from '@app/common/schemas/user.schema';
 import { UserService } from 'apps/user/src/user.service';
 import { JwtStrategy } from './strategy/jwt-strategy';
 import { PassportModule } from '@nestjs/passport';
+import { AuthMiddleware } from './middleware/auth.middleware';
 
 @Module({
   imports: [MongoModule,
@@ -26,4 +27,8 @@ import { PassportModule } from '@nestjs/passport';
   providers: [AuthService, UserService, JwtStrategy],
   exports: [AuthService]
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}

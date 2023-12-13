@@ -1,6 +1,8 @@
 <div *ngIf="errorMessage">{{ errorMessage }}</div>
 
-<h2>User Management</h2>
+<ng-container *ngIf="true">
+  <h2>User Management</h2>
+</ng-container>
 
 <!-- Display a form for adding new users -->
 <form (submit)="createUser()">
@@ -11,8 +13,10 @@
   <input type="text" placeholder="Phone Number" [(ngModel)]="newUser.phoneNumber" name="phoneNumber">
   <input type="text" placeholder="Role" [(ngModel)]="newUser.role" name="role" required>
   <input type="checkbox" [(ngModel)]="newUser.subscribed" name="subscribed"> Subscribed
-  <input type="text" placeholder="Twitter URI" [ngModel]="newUser.socialMedia?.twitterUri" (ngModelChange)="newUser.socialMedia = { ...(newUser.socialMedia || {}), twitterUri: $event }" name="twitterUri">
-  <input type="text" placeholder="Facebook URI" [ngModel]="newUser.socialMedia?.fbUri" (ngModelChange)="newUser.socialMedia = { ...(newUser.socialMedia || {}), fbUri: $event }" name="fbUri">
+  <input type="text" placeholder="Twitter URI" [ngModel]="newUser.socialMedia?.twitterUri"
+    (ngModelChange)="updateSocialMedia('twitterUri', $event)" name="twitterUri">
+  <input type="text" placeholder="Facebook URI" [ngModel]="newUser.socialMedia?.fbUri"
+    (ngModelChange)="updateSocialMedia('fbUri', $event)" name="fbUri">
   <button type="submit">Add User</button>
 </form>
 
@@ -49,7 +53,7 @@
 </table>
 
 <!-- Display a form for editing users -->
-<form *ngIf="isEdit" (submit)="updateUser(editingUser.id)">
+<form *ngIf="isEdit" (submit)="updateUser(editingUser.id || '')">
   <input type="text" placeholder="Email" [(ngModel)]="editingUser.email" name="email" required>
   <input type="password" placeholder="Password" [(ngModel)]="editingUser.password" name="password" required>
   <input type="text" placeholder="Username" [(ngModel)]="editingUser.username" name="username">
@@ -57,8 +61,10 @@
   <input type="text" placeholder="Phone Number" [(ngModel)]="editingUser.phoneNumber" name="phoneNumber">
   <input type="text" placeholder="Role" [(ngModel)]="editingUser.role" name="role" required>
   <input type="checkbox" [(ngModel)]="editingUser.subscribed" name="subscribed"> Subscribed
-  <input type="text" placeholder="Twitter URI" [ngModel]="editingUser.socialMedia ? editingUser.socialMedia.twitterUri : ''" (ngModelChange)="editingUser.socialMedia = { ...(editingUser.socialMedia || {}), twitterUri: $event }" name="twitterUri">
-  <input type="text" placeholder="Facebook URI" [ngModel]="editingUser.socialMedia ? editingUser.socialMedia.fbUri : ''" (ngModelChange)="editingUser.socialMedia = { ...(editingUser.socialMedia || {}), fbUri: $event }" name="fbUri">
+  <input type="text" placeholder="Twitter URI" [ngModel]="editingUser.socialMedia?.twitterUri"
+    (ngModelChange)="updateSocialMedia('twitterUri', $event)" name="twitterUri">
+  <input type="text" placeholder="Facebook URI" [ngModel]="editingUser.socialMedia?.fbUri"
+    (ngModelChange)="updateSocialMedia('fbUri', $event)" name="fbUri">
   <button type="submit">Update User</button>
   <button (click)="cancelEdit()">Cancel</button>
 </form>
