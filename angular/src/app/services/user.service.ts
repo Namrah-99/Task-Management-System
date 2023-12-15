@@ -7,12 +7,11 @@ import { AuthService } from './auth.service';
     providedIn: 'root'
 })
 export class UserService {
-    private baseUrl = 'http://localhost:3000/users'; // Replace with your user microservice URL
+    private baseUrl = 'http://localhost:3000/users'; // user microservice URL
 
     constructor(private http: HttpClient, private authService: AuthService) { }
 
     getUsers(): Observable<any> {
-        // return this.http.get(`${this.baseUrl}`);
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${this.authService.getToken()}`
         });
@@ -35,7 +34,7 @@ export class UserService {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${this.authService.getToken()}`
         });
-        return this.http.put(`${this.baseUrl}/${userId}`, userData, { headers });
+        return this.http.patch(`${this.baseUrl}/${userId}`, userData, { headers });
     }
 
     deleteUser(userId: string): Observable<any> {

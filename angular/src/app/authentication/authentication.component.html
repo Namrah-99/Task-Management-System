@@ -1,15 +1,143 @@
 <!-- Register Form -->
-<form (ngSubmit)="register()">
+<!-- <form (ngSubmit)="register()">
     <input type="text" [(ngModel)]="registerUserData.username" name="username" placeholder="Username" required><br>
     <input type="email" [(ngModel)]="registerUserData.email" name="email" placeholder="Email" required><br>
     <input type="password" [(ngModel)]="registerUserData.password" name="password" placeholder="Password" required><br>
     <button type="submit">Register</button>
-  </form>
+  </form>   -->
   
   <!-- Login Form -->
-  <form (ngSubmit)="login()">
+  <!-- <form (ngSubmit)="login()">
     <input type="email" [(ngModel)]="loginCredentials.email" name="email" placeholder="Email" required><br>
     <input type="password" [(ngModel)]="loginCredentials.password" name="password" placeholder="Password" required><br>
     <button type="submit">Login</button>
-  </form>
-  
+  </form> -->
+
+  <!-- <section class="forms-section">
+    <h1 class="section-title">Animated Forms</h1>
+    <div class="forms">
+      <div class="form-wrapper is-active">
+        <button type="button" class="switcher switcher-login" (click)="redirectTo('login')">
+          Login
+          <span class="underline"></span>
+        </button>
+        <form class="form form-login">
+          <fieldset>
+            <legend>Please, enter your email and password for login.</legend>
+            <div class="input-block">
+              <label for="login-email">E-mail</label>
+              <input id="login-email" type="email" required>
+            </div>
+            <div class="input-block">
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" required>
+            </div>
+          </fieldset>
+          <button type="submit" class="btn-login">Login</button>
+        </form>
+      </div>
+      <div class="form-wrapper">
+        <button type="button" class="switcher switcher-signup" (click)="redirectTo('register')">
+          Sign Up
+          <span class="underline"></span>
+        </button>
+        <form class="form form-signup">
+          <fieldset>
+            <legend>Please, enter your email, password and password confirmation for sign up.</legend>
+            <div class="input-block">
+              <label for="signup-email">E-mail</label>
+              <input id="signup-email" type="email" required>
+            </div>
+            <div class="input-block">
+              <label for="signup-password">Password</label>
+              <input id="signup-password" type="password" required>
+            </div>
+            <div class="input-block">
+              <label for="signup-password-confirm">Confirm password</label>
+              <input id="signup-password-confirm" type="password" required>
+            </div>
+          </fieldset>
+          <button type="submit" class="btn-signup">Continue</button>
+        </form>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- ---------------------------------------------------------------------- -->
+  <!-- <section class="forms-section">
+    <h1 class="section-title">Animated Forms</h1>
+    <div class="forms">
+      <div [ngClass]="{'form-wrapper': true, 'is-active': activeForm === 'login'}">
+        <button type="button" class="switcher switcher-login" (click)="setActiveForm('login')">
+          Login
+          <span class="underline"></span>
+        </button>
+        <form class="form form-login" *ngIf="activeForm === 'login'" (ngSubmit)="login()">
+          <fieldset>
+            <legend>Please, enter your email and password for login.</legend>
+            <div class="input-block">
+              <label for="login-email">E-mail</label>
+              <input id="login-email" type="email" required>
+            </div>
+            <div class="input-block">
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" required>
+            </div>
+          </fieldset>
+          <button type="submit" class="btn-login">Login</button>
+        </form>
+      </div>
+      <div [ngClass]="{'form-wrapper': true, 'is-active': activeForm === 'register'}">
+        <button type="button" class="switcher switcher-signup" (click)="setActiveForm('register')">
+          Sign Up
+          <span class="underline"></span>
+        </button>
+        <form class="form form-signup" *ngIf="activeForm === 'register'" (ngSubmit)="register()">
+          <fieldset>
+            <legend>Please, enter your email, password and password confirmation for sign up.</legend>
+            <div class="input-block">
+              <label for="signup-email">E-mail</label>
+              <input id="signup-email" type="email" required>
+            </div>
+            <div class="input-block">
+              <label for="signup-password">Password</label>
+              <input id="signup-password" type="password" required>
+            </div>
+            <div class="input-block">
+              <label for="signup-password-confirm">Confirm password</label>
+              <input id="signup-password-confirm" type="password" required>
+            </div>
+          </fieldset>
+          <button type="submit" class="btn-signup">Continue</button>
+        </form>
+      </div>
+    </div>
+  </section> -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <body>
+      <div class="main">
+        <input type="checkbox" id="chk" [(ngModel)]="activeForm" aria-hidden="true">
+      
+        <div class="signup" [class.active]="activeForm === 'register'">
+          <form (ngSubmit)="register()">
+            <label for="chk" (click)="redirectTo('register')" aria-hidden="true">Sign up</label>
+            <input [(ngModel)]="registerUserData.email" type="email" name="email" placeholder="Email" required="">
+            <input [(ngModel)]="registerUserData.password" type="password" name="password" placeholder="Password" required="">
+            <button type="submit" class="btn-signup">Continue</button>
+            <div *ngIf="registerError" class="error">{{ registerError }}</div>
+          </form>
+        </div>
+      
+        <div class="login" [class.active]="activeForm === 'login'">
+          <form (ngSubmit)="login()">
+            <label for="chk" (click)="redirectTo('login')" aria-hidden="true">Login</label>
+            <input [(ngModel)]="loginCredentials.email" type="email" name="email" placeholder="Email" required="">
+            <input [(ngModel)]="loginCredentials.password" type="password" name="pswd" placeholder="Password" required="">
+            <button type="submit" class="btn-login">Login</button>
+            <div *ngIf="loginError" class="error">{{ loginError }}</div>
+          </form>
+        </div>
+      </div>
+    </body>
+    

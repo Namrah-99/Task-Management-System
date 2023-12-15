@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { BadRequestException, Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
 import {
@@ -14,7 +14,15 @@ export class AuthController {
 
   @GrpcMethod('AuthService', 'Register')
   async register(data: RegisterRequest): Promise<RegisterResponse> {
-    return await this.authService.register(data);
+    // return await this.authService.register(data);
+    try {
+      // Attempt to register the user
+      const response = await this.authService.register(data);
+      return response;
+    } catch (error) {
+      console.log('Error in registration:', error.message);
+      throw error;
+    }
   }
 
   @GrpcMethod('AuthService', 'Login')

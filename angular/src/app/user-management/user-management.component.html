@@ -1,70 +1,46 @@
-<div *ngIf="errorMessage">{{ errorMessage }}</div>
+<body>
+  <div *ngIf="errorMessage; else userTable">
+    <p>{{ errorMessage }}</p>
+  </div>
 
-<ng-container *ngIf="true">
-  <h2>User Management</h2>
-</ng-container>
+  <button mat-icon-button (click)="openUserFormDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
 
-<!-- Display a form for adding new users -->
-<form (submit)="createUser()">
-  <input type="text" placeholder="Email" [(ngModel)]="newUser.email" name="email" required>
-  <input type="password" placeholder="Password" [(ngModel)]="newUser.password" name="password" required>
-  <input type="text" placeholder="Username" [(ngModel)]="newUser.username" name="username">
-  <input type="number" placeholder="Age" [(ngModel)]="newUser.age" name="age">
-  <input type="text" placeholder="Phone Number" [(ngModel)]="newUser.phoneNumber" name="phoneNumber">
-  <input type="text" placeholder="Role" [(ngModel)]="newUser.role" name="role" required>
-  <input type="checkbox" [(ngModel)]="newUser.subscribed" name="subscribed"> Subscribed
-  <input type="text" placeholder="Twitter URI" [ngModel]="newUser.socialMedia?.twitterUri"
-    (ngModelChange)="updateSocialMedia('twitterUri', $event)" name="twitterUri">
-  <input type="text" placeholder="Facebook URI" [ngModel]="newUser.socialMedia?.fbUri"
-    (ngModelChange)="updateSocialMedia('fbUri', $event)" name="fbUri">
-  <button type="submit">Add User</button>
-</form>
-
-<!-- Display a table with user details -->
-<table>
-  <tr>
-    <th>Email</th>
-    <th>Password</th>
-    <th>Username</th>
-    <th>Age</th>
-    <th>Phone Number</th>
-    <th>Role</th>
-    <th>Subscribed</th>
-    <th>Twitter URI</th>
-    <th>Facebook URI</th>
-    <th>Actions</th>
-  </tr>
-  <tr *ngFor="let user of users">
-    <td>{{ user.email }}</td>
-    <td>{{ user.password }}</td>
-    <td>{{ user.username }}</td>
-    <td>{{ user.age }}</td>
-    <td>{{ user.phoneNumber }}</td>
-    <td>{{ user.role }}</td>
-    <td>{{ user.subscribed }}</td>
-    <td>{{ user.socialMedia ? user.socialMedia.twitterUri : '' }}</td>
-    <td>{{ user.socialMedia ? user.socialMedia.fbUri : '' }}</td>
-    <td>
-      <button *ngIf="user.id" (click)="deleteUser(user.id)">Delete</button>
-      <!-- Check if user.id is defined before displaying the delete button -->
-      <button (click)="editUser(user)">Edit</button>
-    </td>
-  </tr>
-</table>
-
-<!-- Display a form for editing users -->
-<form *ngIf="isEdit" (submit)="updateUser(editingUser.id || '')">
-  <input type="text" placeholder="Email" [(ngModel)]="editingUser.email" name="email" required>
-  <input type="password" placeholder="Password" [(ngModel)]="editingUser.password" name="password" required>
-  <input type="text" placeholder="Username" [(ngModel)]="editingUser.username" name="username">
-  <input type="number" placeholder="Age" [(ngModel)]="editingUser.age" name="age">
-  <input type="text" placeholder="Phone Number" [(ngModel)]="editingUser.phoneNumber" name="phoneNumber">
-  <input type="text" placeholder="Role" [(ngModel)]="editingUser.role" name="role" required>
-  <input type="checkbox" [(ngModel)]="editingUser.subscribed" name="subscribed"> Subscribed
-  <input type="text" placeholder="Twitter URI" [ngModel]="editingUser.socialMedia?.twitterUri"
-    (ngModelChange)="updateSocialMedia('twitterUri', $event)" name="twitterUri">
-  <input type="text" placeholder="Facebook URI" [ngModel]="editingUser.socialMedia?.fbUri"
-    (ngModelChange)="updateSocialMedia('fbUri', $event)" name="fbUri">
-  <button type="submit">Update User</button>
-  <button (click)="cancelEdit()">Cancel</button>
-</form>
+  <!-- Display a table with user details -->
+  <ng-template #userTable>
+    <div class="container">
+      <h2>User Management <small>Registered users</small> </h2>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Username</div>
+          <div class="col col-2">Email</div>
+          <div class="col col-3">Password</div>
+          <div class="col col-4">Age</div>
+          <div class="col col-4">Phone Number</div>
+          <div class="col col-4">Role</div>
+          <div class="col col-4">Subscribed</div>
+          <div class="col col-4">Twitter URI</div>
+          <div class="col col-4">Facebook URI</div>
+          <div class="col col-4">Actions</div>
+        </li>
+        <li class="table-row" *ngFor="let user of users">
+          <div class="col col-1" data-label="Username">{{ user.username }}</div>
+          <div class="col col-2" data-label="Email">{{ user.email }}</div>
+          <div class="col col-3" data-label="Password">{{ user.password }}</div>
+          <div class="col col-4" data-label="Age">{{ user.age }}</div>
+          <div class="col col-4" data-label="Phone Number">{{ user.phoneNumber }}</div>
+          <div class="col col-4" data-label="Role">{{ user.role }}</div>
+          <div class="col col-4" data-label="Subscribed">{{ user.subscribed }}</div>
+          <div class="col col-4" data-label="Twitter URI">{{ user.socialMedia ? user.socialMedia.twitterUri : '' }}
+          </div>
+          <div class="col col-4" data-label="Facebook URI">{{ user.socialMedia ? user.socialMedia.fbUri : '' }}</div>
+          <div class="col col-4" data-label="Actions">
+            <button *ngIf="user.id" (click)="deleteUser(user.id)" class="delete">Delete</button>
+            <button (click)="openUserFormDialog(user)" class="edit">Edit</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</body>

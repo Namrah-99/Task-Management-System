@@ -6,10 +6,16 @@ import { AuthGrpcClient } from './auth-grpc-client';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly authGrpcClient: AuthGrpcClient) {}
-  
+  constructor(private readonly authGrpcClient: AuthGrpcClient) { }
+
   async register(data: RegisterRequest): Promise<RegisterResponse> {
-    return this.authGrpcClient.getUserServiceClient().Register(data).toPromise();
+    // return this.authGrpcClient.getUserServiceClient().Register(data).toPromise();
+    try {
+      return this.authGrpcClient.getUserServiceClient().Register(data).toPromise();
+    } catch (error) {
+      // Ensure error details are set
+     throw error;
+    }
   }
 
   async login(data: LoginRequest): Promise<LoginResponse> {

@@ -11,10 +11,12 @@ export interface UserPaginationDto {
 
 export interface UpdateUserDto {
   id: string;
+  username: string;
   age: number;
   phoneNumber: string;
   role: string;
   socialMedia: SocialMedia2 | undefined;
+  subscribed: boolean;
 }
 
 export interface FindOneUserDto {
@@ -35,6 +37,7 @@ export interface CreateUserDto {
   age?: number | undefined;
   phoneNumber?: string | undefined;
   role?: string | undefined;
+  subscribed?: boolean | undefined;
 }
 
 export interface User2 {

@@ -7,17 +7,34 @@ import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { TaskManagementComponent } from './task-management/task-management.component';
+import { UserFormComponent } from './forms/user-form/user-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthenticationComponent,
     UserManagementComponent,
-    TaskManagementComponent
+    TaskManagementComponent,
+    UserFormComponent
   ],
   imports: [
-    BrowserModule,HttpClientModule,FormsModule,
-    AppRoutingModule
+    BrowserModule, HttpClientModule, FormsModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

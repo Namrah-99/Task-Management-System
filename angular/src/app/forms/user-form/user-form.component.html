@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>{{ data.user ? 'Edit User' : 'Add User' }}</h2>
+
+<mat-dialog-content>
+  <form (submit)="onSaveClick()">
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Email" [(ngModel)]="user.email" name="email" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput type="password" placeholder="Password" [(ngModel)]="user.password" name="password" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Username" [(ngModel)]="user.username" name="username">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput type="number" placeholder="Age" [(ngModel)]="user.age" name="age">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Phone Number" [(ngModel)]="user.phoneNumber" name="phoneNumber">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Role" [(ngModel)]="user.role" name="role" required>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="user.subscribed" name="subscribed" [disabled]="!data.user">Subscribed</mat-checkbox>
+
+    <mat-form-field appearance="fill">
+      <input matInput type="text" placeholder="Twitter URI" [ngModel]="user.socialMedia?.twitterUri"
+        (ngModelChange)="updateSocialMedia('twitterUri', $event)" name="twitterUri" [disabled]="!data.user">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput type="text" placeholder="Facebook URI" [ngModel]="user.socialMedia?.fbUri"
+        (ngModelChange)="updateSocialMedia('fbUri', $event)" name="fbUri" [disabled]="!data.user">
+    </mat-form-field>
+
+    <button mat-button type="button" (click)="onNoClick()" class="cancel">Cancel</button>
+    <button mat-button type="submit" class="save">Save</button>
+  </form>
+</mat-dialog-content>

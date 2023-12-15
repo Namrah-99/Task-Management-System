@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UserFormComponent } from '../forms/user-form/user-form.component';
+import { Subscription } from 'rxjs';
+import { UserDataService } from '../services/shared/user-data.service';
 
 @Component({
   selector: 'app-user-management',
@@ -9,22 +13,45 @@ import { UserService } from '../services/user.service';
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
-  newUser: User = {} as User; // Empty User object for creating a new user
-  editingUser: User = {} as User; // Empty User object for editing a user
-  isEdit = false; // Flag to indicate if the user is in edit mode
   errorMessage = '';
 
-  constructor(private userService: UserService) { }
+  private userDataSubscription: Subscription;
+
+  constructor(
+    private userService: UserService,
+    public dialog: MatDialog,
+    private userDataService: UserDataService
+  ) {
+    // Subscribe to changes in user data
+    this.userDataSubscription = this.userDataService.userData$.subscribe(
+      (userData: User | null) => {
+        if (userData) {
+          // Update local array with the new or updated user
+          const index = this.users.findIndex(u => u.id === userData.id);
+          if (index !== -1) {
+            this.users[index] = { ...userData };
+          } else {
+            this.users.push(userData);
+          }
+        }
+      }
+    );
+  }
 
   ngOnInit(): void {
-    console.log('fetchUsers is called next')
+    console.log('fetchUsers is called next');
     this.fetchUsers();
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to avoid memory leaks
+    this.userDataSubscription.unsubscribe();
   }
 
   fetchUsers(): void {
     this.userService.getUsers().subscribe(
       (data: any) => {
-        console.log('Users data : ', data)
+        console.log('Users data : ', data);
         if (data && data.users) {
           this.users = data.users; // Replace 'users' with the actual property name
         } else {
@@ -35,41 +62,6 @@ export class UserManagementComponent implements OnInit {
       (error) => {
         this.errorMessage = 'Failed to fetch users.';
         console.error('Error fetching users:', error);
-      }
-    );
-  }
-
-  createUser(): void {
-    this.userService.createUser(this.newUser).subscribe(
-      (data: User) => {
-        this.users.push(data);
-        this.newUser = {} as User; // Reset the new user object
-      },
-      (error) => {
-        this.errorMessage = 'Failed to create user.';
-        console.error('Error creating user:', error);
-      }
-    );
-  }
-
-  editUser(user: User): void {
-    this.isEdit = true;
-    this.editingUser = { ...user }; // Make a copy of the user for editing
-  }
-
-  updateUser(id: string): void {
-    this.userService.updateUser(id, this.editingUser).subscribe(
-      () => {
-        const index = this.users.findIndex(u => u.id === this.editingUser.id);
-        if (index !== -1) {
-          this.users[index] = { ...this.editingUser }; // Update the user in the local array
-          this.isEdit = false;
-          this.editingUser = {} as User; // Reset the editing user object
-        }
-      },
-      (error) => {
-        this.errorMessage = 'Failed to update user.';
-        console.error('Error updating user:', error);
       }
     );
   }
@@ -86,13 +78,14 @@ export class UserManagementComponent implements OnInit {
     );
   }
 
-  cancelEdit(): void {
-    this.isEdit = false;
-    this.editingUser = {} as User; // Reset the editing user object
-  }
+  openUserFormDialog(user?: User): void {
+    const dialogRef = this.dialog.open(UserFormComponent, {
+      width: '500px',
+      data: { user: user || null }
+    });
 
-  updateSocialMedia(key: string, value: string): void {
-    this.newUser.socialMedia = { ...(this.newUser.socialMedia || {}), [key]: value };
+    dialogRef.afterClosed().subscribe(() => {
+      // Dialog closed
+    });
   }
-  
 }

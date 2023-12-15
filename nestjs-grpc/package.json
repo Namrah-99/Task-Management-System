@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/apigateway/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/apigateway/test/jest-e2e.json",
+    "generate-protobuf": "protoc --plugin=./node_modules/.bin/protoc-gen-ts-proto --ts_proto_out=./ --ts_proto_opt=nestJs=true ./proto/*.proto"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.9.11",
