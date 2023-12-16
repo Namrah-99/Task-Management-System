@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { TaskFormComponent } from './forms/task-form/task-form.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
     AuthenticationComponent,
     UserManagementComponent,
     TaskManagementComponent,
-    UserFormComponent
+    UserFormComponent,
+    TaskFormComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule,

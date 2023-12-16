@@ -1,0 +1,67 @@
+/* Add these styles to your component's CSS file */
+
+mat-dialog-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 26px;
+    margin: 20px 0;
+    text-align: center;
+    color: #000000;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+input, mat-checkbox {
+    width: 100%;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button.cancel {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+button.cancel:hover {
+    background-color: #cccccc;
+}
+
+button.save {
+    /* background-color: #4CAF50;  */
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(152,35,35,1) 0%, rgba(225,64,64,1) 100.2% );
+    color: #ffffff;
+}
+
+button.save:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Styles */
+@media all and (max-width: 767px) {
+    h2 {
+        font-size: 20px;
+        margin: 10px 0;
+    }
+
+    mat-form-field {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+    }
+}

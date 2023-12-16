@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{ data.task ? 'Edit Task' : 'Add Task' }}</h2>
+
+<mat-dialog-content>
+  <form (submit)="onSaveClick()">
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Description" [(ngModel)]="task.description" name="description" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput type="number" placeholder="Estimated Time" [(ngModel)]="task.estimatedTime" name="estimatedTime" required>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="task.completed" name="completed" [disabled]="!data.task">Completed</mat-checkbox>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Category Name" [ngModel]="task.category?.name"
+        (ngModelChange)="updateCategory('name', $event)" name="categoryName">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Subcategory" [ngModel]="task.category?.subCategory"
+        (ngModelChange)="updateCategory('subCategory', $event)" name="subCategory">
+    </mat-form-field>
+
+    <button mat-button type="button" (click)="onNoClick()" class="cancel">Cancel</button>
+    <button mat-button type="submit" class="save">Save</button>
+  </form>
+</mat-dialog-content>

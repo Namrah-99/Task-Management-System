@@ -14,11 +14,12 @@ import { JwtAuthGuard } from '@app/common/guards/jwt.auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard) // Apply JwtAuthGuard here to protect this route
   create(@Body() createUserDto: CreateUserDto) {
-    console.log("createUserDto ",createUserDto);
+    console.log("createUserDto ", createUserDto);
     return this.usersService.createUser(createUserDto);
   }
 
@@ -32,23 +33,23 @@ export class UsersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard) // Apply JwtAuthGuard here to protect this route
   findOne(@Param('id') id: string) {
-    const findOneUserDto: FindOneUserDto={id}
+    const findOneUserDto: FindOneUserDto = { id }
     return this.usersService.findOneUser(findOneUserDto);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard) // Apply JwtAuthGuard here to protect this route
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-        if (!updateUserDto.id) {
-          updateUserDto.id = id;
-        }
+    if (!updateUserDto.id) {
+      updateUserDto.id = id;
+    }
     return this.usersService.updateUser(updateUserDto);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard) // Apply JwtAuthGuard here to protect this route
   remove(@Param('id') id: string) {
-    const findOneUserDto: FindOneUserDto={id}
+    const findOneUserDto: FindOneUserDto = { id }
     return this.usersService.removeUser(findOneUserDto);
   }
 }

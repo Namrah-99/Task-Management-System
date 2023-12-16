@@ -4,43 +4,36 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class UserService {
-    private baseUrl = 'http://localhost:3000/users'; // user microservice URL
+  private baseUrl = 'http://localhost:3000/users'; // user microservice URL
 
-    constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-    getUsers(): Observable<any> {
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.authService.getToken()}`
-        });
-        console.log('headers : ', headers)
-        return this.http.get(`${this.baseUrl}`, { headers });
-    }
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+  }
 
-    getUserById(userId: string): Observable<any> {
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.authService.getToken()}`
-        });
-        return this.http.get(`${this.baseUrl}/${userId}`, { headers });
-    }
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}`, { headers: this.getHeaders() });
+  }
 
-    createUser(userData: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}`, userData);
-    }
+  getUserById(userId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${userId}`, { headers: this.getHeaders() });
+  }
 
-    updateUser(userId: string, userData: any): Observable<any> {
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.authService.getToken()}`
-        });
-        return this.http.patch(`${this.baseUrl}/${userId}`, userData, { headers });
-    }
+  createUser(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, userData, { headers: this.getHeaders() });
+  }
 
-    deleteUser(userId: string): Observable<any> {
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.authService.getToken()}`
-        });
-        return this.http.delete(`${this.baseUrl}/${userId}`, { headers });
-    }
+  updateUser(userId: string, userData: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${userId}`, userData, { headers: this.getHeaders() });
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${userId}`, { headers: this.getHeaders() });
+  }
 }

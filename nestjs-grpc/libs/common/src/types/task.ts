@@ -11,6 +11,9 @@ export interface TaskPaginationDto {
 
 export interface UpdateTaskDto {
   id: string;
+  description: string;
+  estimatedTime: number;
+  completed: boolean;
   category: Category | undefined;
 }
 
@@ -28,6 +31,7 @@ export interface Tasks {
 export interface CreateTaskDto {
   description: string;
   estimatedTime: number;
+  category: Category | undefined;
 }
 
 export interface Task {

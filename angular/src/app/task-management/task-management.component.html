@@ -1,1 +1,37 @@
-<p>task-management works!</p>
+<body>
+  <div *ngIf="errorMessage; else taskTable">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <button mat-icon-button (click)="openTaskFormDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <!-- Display a table with task details -->
+  <ng-template #taskTable>
+    <div class="container">
+      <h2>Task Management <small>Task List</small></h2>
+      <ul class="responsive-table">
+        <li class="table-header">
+          <div class="col col-1">Description</div>
+          <div class="col col-2">Estimated Time</div>
+          <div class="col col-3">Completed</div>
+          <div class="col col-4">Category</div>
+          <div class="col col-4">Subcategory</div>
+          <div class="col col-4">Actions</div>
+        </li>
+        <li class="table-row" *ngFor="let task of tasks">
+          <div class="col col-1" data-label="Description">{{ task.description }}</div>
+          <div class="col col-2" data-label="Estimated Time">{{ task.estimatedTime }}</div>
+          <div class="col col-3" data-label="Completed">{{ task.completed }}</div>
+          <div class="col col-4" data-label="Category">{{ task?.category?.name }}</div>
+          <div class="col col-4" data-label="Subcategory">{{ task?.category?.subCategory }}</div>
+          <div class="col col-4" data-label="Actions">
+            <button *ngIf="task.id" (click)="deleteTask(task.id)" class="delete">Delete</button>
+            <button (click)="openTaskFormDialog(task)" class="edit">Edit</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</body>
