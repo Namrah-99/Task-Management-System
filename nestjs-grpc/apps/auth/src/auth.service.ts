@@ -5,6 +5,8 @@ import { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse } from '
 import { AuthModel } from '@app/common/schemas/auth.schema';
 import * as jwt from 'jsonwebtoken';
 import { UserService } from 'apps/user/src/user.service';
+import { RpcException } from '@nestjs/microservices';
+import { AppErrors } from '@app/common/modules/error.constants';
 
 @Injectable()
 export class AuthService {
@@ -36,8 +38,7 @@ export class AuthService {
     const existingUser = await this.userService.findUserByEmail(email);
   
     if (existingUser) {
-      // User with the email already exists, return an error response
-      throw new Error('User with this email already exists');
+      throw new RpcException(AppErrors.USER_ALREADY_EXISTS);
     }
   
     // If the user does not exist, proceed with user registration
@@ -59,7 +60,7 @@ export class AuthService {
     const { email, password } = data;
     const user = await this.authModel.findOne({ email, password }).exec();
     if (!user) {
-      throw new Error('Invalid credentials');
+    throw new RpcException(AppErrors.INVALID_CREDENTIALS );
     }
 
     const token = this.generateToken(user);
@@ -75,7 +76,7 @@ export class AuthService {
     try {
       return jwt.verify(token, this.JWT_SECRET);
     } catch (error) {
-      throw new Error('Invalid token');
+      throw new RpcException(AppErrors.INVALID_TOKEN );
     }
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { filter } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-authentication',
@@ -52,10 +53,14 @@ export class AuthenticationComponent implements OnInit {
         // Redirect to the users route after registration
       },
       (error) => {
-        console.error('Registration failed:', error);
-        // Display error message
-        this.registerError = error.message || 'Unknown error occurred';
+        console.error('Registration failed:', error );
+        this.registerError = error.message;
       }
+      // (error) => {
+      //   console.error('Registration failed:', error);
+      //   this.registerError = error.message === AppErrors.USER_ALREADY_EXISTS ?
+      //                         AppErrors.USER_ALREADY_EXISTS : AppErrors.INTERNAL_SERVER_ERROR;
+      // }
     );
   }
 
@@ -70,8 +75,14 @@ export class AuthenticationComponent implements OnInit {
       (error) => {
         console.error('Login failed:', error);
         // Display error message
-        this.loginError = `Login failed: ${error.message} `;
+        this.loginError = error.message;
       }
+      // (error) => {
+      //   console.error('Login failed:', error);
+      //   this.loginError = error.message === AppErrors.INVALID_CREDENTIALS ?
+      //                      AppErrors.INVALID_CREDENTIALS : AppErrors.INTERNAL_SERVER_ERROR;
+      // }
     );
   }
+
 }
