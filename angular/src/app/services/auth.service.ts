@@ -20,8 +20,9 @@
 // }
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 import { AppErrors } from '../common/error.constants';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class AuthService {
   private baseUrl = 'http://localhost:3000/auth';
   private tokenKey = 'access_token';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // register(data: any): Observable<any> {
   //   return this.http.post<any>(`${this.baseUrl}/register`, data).pipe(
@@ -62,6 +63,7 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/login`, data).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = this.extractErrorMessage(error);
+        console.log('errorMessage : ', errorMessage)
         throw new Error(errorMessage);
       })
     );
@@ -77,6 +79,27 @@ export class AuthService {
 
   removeToken(): void {
     localStorage.removeItem(this.tokenKey);
+  }
+
+  logout(): Observable<any> {
+    // Assuming your logout API endpoint is at `${this.baseUrl}/logout`
+    return this.http.post<any>(`${this.baseUrl}/logout`, {}).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = this.extractErrorMessage(error);
+        throw new Error(errorMessage);
+      }),
+      // Remove the token from local storage on successful logout
+      tap(() => {
+        this.removeToken();
+        // Navigate to the main route after successful logout
+        this.router.navigate(['/']);
+      })
+    );
+  }
+
+  isLoggedIn(): boolean {
+    // Check if the user is logged in by verifying the presence of the access token
+    return !!this.getToken();
   }
 
   // private extractErrorMessage(error: HttpErrorResponse): string {
@@ -114,14 +137,14 @@ export class AuthService {
       message = error.error.message;
     }
     const lastIndex = message.lastIndexOf(':');
-      if (lastIndex !== -1) {
-        const errorCode = message.substring(0, lastIndex);
-        const msg = message.substring(lastIndex + 2); // +2 to skip space after colon
-        console.log("Error Code:", errorCode);
-        console.log("Message:", msg);
-        return msg;
-      } else {
-        return message;
-      }
+    if (lastIndex !== -1) {
+      const errorCode = message.substring(0, lastIndex);
+      const msg = message.substring(lastIndex + 2); // +2 to skip space after colon
+      console.log("Error Code:", errorCode);
+      console.log("Message:", msg);
+      return msg;
+    } else {
+      return message;
+    }
   }
 }

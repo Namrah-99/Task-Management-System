@@ -1,0 +1,7 @@
+<header>
+  <nav>
+    <a routerLink="/users">Users</a>
+    <a routerLink="/tasks">Tasks</a>
+    <button *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
+  </nav>
+</header>

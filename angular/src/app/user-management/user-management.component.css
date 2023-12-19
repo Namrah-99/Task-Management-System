@@ -1,16 +1,13 @@
 body {
-    min-height: 100vh;
-    font-family: 'lato', sans-serif;
-    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    /* display: flex;
-    justify-content: flex-end;
-    align-items: flex-start; */
-    padding: 20px;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    text-align: center;
+  min-height: 100vh;
+  font-family: 'lato', sans-serif;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+ /* margin: 70px 0 0;  Adjust the top margin to make space for the header */
+ padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
 }
 
 .button-container {

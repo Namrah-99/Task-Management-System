@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskFormComponent } from './forms/task-form/task-form.component';
+import { HeaderComponent } from './common/header/header.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { TaskFormComponent } from './forms/task-form/task-form.component';
     UserManagementComponent,
     TaskManagementComponent,
     UserFormComponent,
-    TaskFormComponent
+    TaskFormComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FormsModule,
@@ -37,6 +39,7 @@ import { TaskFormComponent } from './forms/task-form/task-form.component';
     MatCheckboxModule,
     MatFormFieldModule,
     MatIconModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

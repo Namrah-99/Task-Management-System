@@ -1,28 +1,36 @@
 <h2 mat-dialog-title>{{ data.task ? 'Edit Task' : 'Add Task' }}</h2>
 
 <mat-dialog-content>
-  <form (submit)="onSaveClick()">
+  <form *ngIf="taskForm" [formGroup]="taskForm" (submit)="onSaveClick()">
     <mat-form-field appearance="fill">
-      <input matInput placeholder="Description" [(ngModel)]="task.description" name="description" required>
+      <input matInput placeholder="Title" formControlName="title" required>
+      <mat-error *ngIf="taskForm?.get('title')?.hasError('required')">Title is required</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <input matInput type="number" placeholder="Estimated Time" [(ngModel)]="task.estimatedTime" name="estimatedTime" required>
-    </mat-form-field>
-
-    <mat-checkbox [(ngModel)]="task.completed" name="completed" [disabled]="!data.task">Completed</mat-checkbox>
-
-    <mat-form-field appearance="fill">
-      <input matInput placeholder="Category Name" [ngModel]="task.category?.name"
-        (ngModelChange)="updateCategory('name', $event)" name="categoryName">
+      <textarea matInput placeholder="Description" formControlName="description"></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <input matInput placeholder="Subcategory" [ngModel]="task.category?.subCategory"
-        (ngModelChange)="updateCategory('subCategory', $event)" name="subCategory">
+      <input matInput placeholder="Priority" formControlName="priority" required>
+      <mat-error *ngIf="taskForm?.get('priority')?.hasError('required')">Priority is required</mat-error>
     </mat-form-field>
 
-    <button mat-button type="button" (click)="onNoClick()" class="cancel">Cancel</button>
-    <button mat-button type="submit" class="save">Save</button>
+    <mat-form-field appearance="fill">
+      <input matInput type="number" placeholder="Estimated Time" formControlName="estimatedTime" required>
+      <mat-error *ngIf="taskForm?.get('estimatedTime')?.hasError('min')">Estimated Time must be a positive number</mat-error>
+    </mat-form-field>
+
+    <mat-checkbox formControlName="completed">Completed</mat-checkbox>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Category Name" formControlName="categoryName">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <input matInput placeholder="Subcategory Name" formControlName="subCategoryName">
+    </mat-form-field>
+
+    <button mat-button type="submit" class="save" [disabled]="taskForm.invalid">Save</button>
   </form>
 </mat-dialog-content>

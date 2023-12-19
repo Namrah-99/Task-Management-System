@@ -9,7 +9,7 @@ export class AuthModel extends Document {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, length: 60 })
   password: string;
 }
 

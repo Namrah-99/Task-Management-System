@@ -6,6 +6,7 @@ import {
   RegisterResponse,
   LoginRequest,
   LoginResponse,
+  LogoutRequest,
 } from '@app/common/types/auth';
 import { AppErrors } from '@app/common/modules/error.constants';
 
@@ -40,5 +41,14 @@ export class AuthController {
       }
     }
 
+  }
+  @GrpcMethod('AuthService', 'Logout')
+  async logout(data: LogoutRequest): Promise<any> {
+    try {
+      return await this.authService.logout(data.userId);
+    } catch (error) {
+      console.log('Error during logout:', error.message);
+      throw new RpcException(AppErrors.INTERNAL_SERVER_ERROR);
+    }
   }
 }

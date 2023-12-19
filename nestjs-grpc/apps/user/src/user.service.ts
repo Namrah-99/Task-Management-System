@@ -5,6 +5,7 @@ import { UserModel } from '@app/common/schemas/user.schema';
 import { CreateUserDto, FindOneUserDto, UpdateUserDto, User2, Users } from '@app/common/types/user';
 import { AppErrors } from '@app/common/modules/error.constants';
 import { RpcException } from '@nestjs/microservices';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -37,7 +38,6 @@ export class UserService {
       });
   
       return { users: transformedUsers };
-      return { users: transformedUsers };
     } catch (error) {
       // Log the error here
       throw new RpcException(AppErrors.INTERNAL_SERVER_ERROR);
@@ -64,9 +64,12 @@ export class UserService {
         throw new RpcException(AppErrors.USER_ALREADY_EXISTS);
       }
 
+      // Hash the password before saving it to the database
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       const createdUser = new this.userModel({
         username,
-        password,
+        password: hashedPassword,
         age,
         email,
         phoneNumber,

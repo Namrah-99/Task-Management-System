@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Task } from 'src/app/models/task.model';
 import { TaskDataService } from 'src/app/services/shared/task-data.service';
 import { TaskService } from 'src/app/services/task.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-task-form',
@@ -11,56 +12,79 @@ import { TaskService } from 'src/app/services/task.service';
 })
 export class TaskFormComponent {
   task: Task = {
+    title: '',
     description: '',
+    priority: '',
     estimatedTime: 0,
     completed: false,
-    category: {}
+    category: {
+      name: '',
+      subCategory: ''
+    }
   };
 
+  taskForm: FormGroup = this.fb.group({});
+
   constructor(
-    private dialogRef: MatDialogRef<TaskFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { task: Task },
+    private fb: FormBuilder,
+    public dialogRef: MatDialogRef<TaskFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private taskService: TaskService,
     private taskDataService: TaskDataService
   ) {
-    // If task data is provided, initialize the form with it
-    if (data && data.task) {
-      this.task = { ...data.task };
+    this.initForm();
+  }
+
+  initForm(): void {
+    this.taskForm = this.fb.group({
+      title: ['', [Validators.required]],
+      description: [''],
+      priority: ['', [Validators.required]],
+      estimatedTime: [0, [Validators.min(0)]],
+      completed: [false],
+      categoryName: [''],
+      subCategoryName: [''],
+    });
+
+    if (this.data.task) {
+      this.task = { ...this.data.task };
+      this.taskForm.patchValue({
+        title: this.task.title,
+        description: this.task.description,
+        priority: this.task.priority,
+        estimatedTime: this.task.estimatedTime,
+        completed: this.task.completed,
+        categoryName: this.task.category?.name,
+        subCategoryName: this.task.category?.subCategory,
+      });
     }
   }
 
   onSaveClick() {
     if (this.data.task) {
-      this.updateTask(); // Update existing task
+      this.updateTask();
     } else {
-      this.createTask(); // Create new task
+      this.createTask();
     }
   }
 
   updateCategory(key: string, value: any) {
-    // Ensure task and Category are initialized before updating properties
     if (!this.task.category) {
-      this.task.category = {
-        name: '',
-        subCategory: ''
-      };
+      this.task.category = {};
     }
 
-    // Use type assertion to tell TypeScript that key is a valid property
     (this.task.category as { [key: string]: string })[key] = value;
   }
-  
+
   updateTask() {
     this.taskService.updateTask(this.task.id || '', this.task).subscribe(
       (updatedTask: Task) => {
         console.log('Task data updated:', updatedTask);
-        // Notify TaskManagementComponent about the update
         this.taskDataService.setTaskData(updatedTask);
         this.dialogRef.close();
       },
       (error) => {
         console.error('Error updating task:', error);
-        // Handle error if needed
       }
     );
   }
@@ -69,19 +93,16 @@ export class TaskFormComponent {
     this.taskService.createTask(this.task).subscribe(
       (createdTask: Task) => {
         console.log('Task created:', createdTask);
-        // Notify TaskManagementComponent about the creation
         this.taskDataService.setTaskData(createdTask);
         this.dialogRef.close();
       },
       (error) => {
         console.error('Error creating task:', error);
-        // Handle error if needed
       }
     );
   }
 
   onNoClick() {
-    // Close the dialog without saving
     this.dialogRef.close();
   }
 }

@@ -3,21 +3,20 @@
     <p>{{ errorMessage }}</p>
   </div>
   <ng-template #userTable>
-    <div class="button-container">
+    <!-- <div class="button-container">
       <button mat-icon-button (click)="openUserFormDialog()">
         <mat-icon>add</mat-icon>
       </button>
-    </div>
+    </div> -->
 
-  <!-- Display a table with user details -->
-  
+    <!-- Display a table with user details -->
+
     <div class="container">
       <h2>User Management <small>Registered users</small> </h2>
       <ul class="responsive-table">
         <li class="table-header">
           <div class="col col-1">Username</div>
           <div class="col col-2">Email</div>
-          <div class="col col-3">Password</div>
           <div class="col col-4">Age</div>
           <div class="col col-4">Phone Number</div>
           <div class="col col-4">Role</div>
@@ -29,7 +28,6 @@
         <li class="table-row" *ngFor="let user of users">
           <div class="col col-1" data-label="Username">{{ user.username }}</div>
           <div class="col col-2" data-label="Email">{{ user.email }}</div>
-          <div class="col col-3" data-label="Password">{{ user.password }}</div>
           <div class="col col-4" data-label="Age">{{ user.age }}</div>
           <div class="col col-4" data-label="Phone Number">{{ user.phoneNumber }}</div>
           <div class="col col-4" data-label="Role">{{ user.role }}</div>
