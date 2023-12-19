@@ -2,11 +2,15 @@ body {
     min-height: 100vh;
     font-family: 'lato', sans-serif;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    display: flex;
+    /* display: flex;
     justify-content: flex-end;
-    align-items: flex-start;
+    align-items: flex-start; */
     padding: 20px;
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
 }
 
 .button-container {
@@ -157,4 +161,11 @@ button.delete:hover {
     color: #ffffff;
     background-color: #c0392b;
     /* Darker red color on hover for Delete button */
+}
+
+.error {
+    color: #ff0000;
+    /* Red color for error messages */
+    margin: 1rem;
+    font-size: 1em;
 }

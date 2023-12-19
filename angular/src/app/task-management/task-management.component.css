@@ -2,9 +2,13 @@ body {
     min-height: 100vh;
     font-family: 'lato', sans-serif;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    display: flex;
+    /* display: flex;
     justify-content: flex-end;
+    align-items: flex-start; */
+    display: flex;
+    justify-content: center;
     align-items: flex-start;
+    text-align: center;
     padding: 20px;
     margin: 0;
 }
@@ -32,7 +36,6 @@ button:hover {
 .container {
     width: 100%;
     max-width: none;
-    /* Remove the max-width property */
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -100,9 +103,7 @@ h2 {
         }
 
         .col {
-
             flex-basis: 100%;
-
         }
 
         .col {
@@ -120,10 +121,20 @@ h2 {
     }
 }
 
+.error {
+    color: #ff0000;
+    margin: 1rem;
+    font-size: 1em;
+    text-align: center;
+}
+
 .button-container {
     position: fixed;
     top: 20px;
     right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 button {
@@ -132,29 +143,25 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 button.edit {
     color: #ffffff;
     background-color: #3498db;
-    /* Blue color for Edit button */
 }
 
 button.delete {
     color: #ffffff;
     background-color: #e74c3c;
-    /* Red color for Delete button */
 }
 
 button.edit:hover {
     color: #ffffff;
     background-color: #2980b9;
-    /* Darker blue color on hover for Edit button */
 }
 
 button.delete:hover {
     color: #ffffff;
     background-color: #c0392b;
-    /* Darker red color on hover for Delete button */
 }

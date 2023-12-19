@@ -1,14 +1,15 @@
 <body>
-  <div *ngIf="errorMessage; else taskTable">
+  <div class="error" *ngIf="errorMessage; else taskTable">
     <p>{{ errorMessage }}</p>
   </div>
-
-  <button mat-icon-button (click)="openTaskFormDialog()">
-    <mat-icon>add</mat-icon>
-  </button>
-
   <!-- Display a table with task details -->
   <ng-template #taskTable>
+    <div class="button-container">
+      <button mat-icon-button (click)="openTaskFormDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    
     <div class="container">
       <h2>Task Management <small>Task List</small></h2>
       <ul class="responsive-table">

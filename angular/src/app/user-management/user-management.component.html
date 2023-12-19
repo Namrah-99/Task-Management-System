@@ -1,14 +1,16 @@
 <body>
-  <div *ngIf="errorMessage; else userTable">
+  <div class="error" *ngIf="errorMessage; else userTable">
     <p>{{ errorMessage }}</p>
   </div>
-
-  <button mat-icon-button (click)="openUserFormDialog()">
-    <mat-icon>add</mat-icon>
-  </button>
+  <ng-template #userTable>
+    <div class="button-container">
+      <button mat-icon-button (click)="openUserFormDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
 
   <!-- Display a table with user details -->
-  <ng-template #userTable>
+  
     <div class="container">
       <h2>User Management <small>Registered users</small> </h2>
       <ul class="responsive-table">
