@@ -16,22 +16,22 @@ Authentication UI: Handles user login and registration.
 **Implementation Steps:**
 
 *Backend (NestJS):*
-Set up NestJS project (nest new project-name).
-Create controllers, services, and DTOs for Task, User, and Auth.
-Implement CRUD operations for Task and User services.
-Add authentication middleware using JWT.
-Implement user registration, login, and token generation in the Auth service.
+Sets up NestJS project (nest new project-name).
+Creates controllers, services, and DTOs for Task, User, and Auth.
+Implementes CRUD operations for Task and User services.
+Adds authentication middleware using JWT.
+Implements user registration, login, and token generation in the Auth service.
 
 *Frontend (Angular):*
-Set up an Angular project (ng new project-name).
-Create components for Task Management, User Profile, and Authentication.
-Use Angular services to communicate with the corresponding NestJS microservices.
-Implement forms for creating/updating tasks and updating user profiles.
-Handle user authentication using JWT.
+Sets up an Angular project (ng new project-name).
+Creats components for Task Management, User Profile, and Authentication.
+Uses Angular services to communicate with the corresponding NestJS microservices.
+Implements forms for creating/updating tasks and updates user profiles.
+Handles user authentication using JWT.
 
 *Communication Between Microservices:*
-Use HTTP requests or gRPC for communication between the frontend and backend microservices.
-Implement error handling and data validation on both sides.
+Uses gRPC for communication between the frontend and backend microservices.
+Implements error handling and data validation on both sides.
 
 
 
